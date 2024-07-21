@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -155,6 +156,24 @@ public class DCostService implements IDCostService {
                 .totalPages(userSubscribes.getTotalPages())
                 .totalSize(userSubscribes.getSize())
                 .build();
+    }
+
+    @Override
+    public CommonResp resetSync(SyncRequest syncRequest) {
+        Pageable paging = PageRequest.of(0, 5); // only have 5 source
+        Page<UserSubscribe> userSubscribes = userSubscribeRepository.findAllByUserId(syncRequest.getUserId(),paging);
+        if(userSubscribes.getSize()>0) {
+            userSubscribes.stream().forEach(data ->{
+                data.setDailyAmount(0);
+                data.setMonthlyAmount(0);
+                data.setYearlyAmount(0);
+                userSubscribeRepository.save(data);
+            });
+        }
+        CommonResp response = new CommonResp();
+        response.setSuccess(true);
+        response.setMessage("successful been reset");
+        return response;
     }
 
 }

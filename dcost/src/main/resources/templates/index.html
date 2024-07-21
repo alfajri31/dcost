@@ -50,8 +50,12 @@
 <body>
 <section class="m-5 p-5" style="background-color: grey  ;color: white;border-radius: 1rem ">
     <div class="pt-5">
-        <h2>DCOST-SIMULATION</h2></div>
-    <div class="mt-5 btn btn-primary">SYNC PROGRAM TO SIMULATE</div>
+        <h2>DCOST-SIMULATION</h2>
+    </div>
+    <div class="row">
+        <div class="col-4 mt-5 btn btn-primary">SYNC PROGRAM TO SIMULATE</div>
+        <div class="col-4 mt-5 btn btn-danger" style="margin-left:50px;">RESET PROGRESS</div>
+    </div>
     <div class="pb-3"></div>
     <div>
         <div id="overlay">
@@ -66,59 +70,108 @@
 
 <script>
     $(document).ready(function() {
-         $(document).ajaxSend(function() {
-            $("#overlay").fadeIn(300);　
-         });
+       $(document).ajaxSend(function() {
+          $("#overlay").fadeIn(300);　
+       });
 
-        $('.btn-primary').click(function() {
-            let dataToSend = {
-                // Add your JSON data here
+  $('.btn-danger').click(function() {
+    let dataToSend = {
+        userId: "49b7a371-a487-4fdb-b0d2-4ceb58656f1c",
+        digitalPaymentIds: ["ecb6cd26-cc21-4c7d-aecd-e1cae2d99d62","1095eb1c-8611-49e5-a582-054c8037aaae","63279f87-a860-40d1-ad1d-2b298958b84b"]
+    };
+    $.ajax({
+        url: '/dcost-service/subscribe/reset',
+        type: 'POST',
+        contentType: 'application/json',
+        dataType: 'json',
+        data:  JSON.stringify(dataToSend),
+        success: function(response) {
+            setTimeout(function(){
+                    $("#overlay").fadeOut(100);
+            },100);
+            console.log('Sync API response:', response);
+            let inquiryReq = {
                 userId: "49b7a371-a487-4fdb-b0d2-4ceb58656f1c",
-                digitalPaymentIds: ["ecb6cd26-cc21-4c7d-aecd-e1cae2d99d62","1095eb1c-8611-49e5-a582-054c8037aaae","63279f87-a860-40d1-ad1d-2b298958b84b"]
+                page: 0,
+                size: 10
             };
+            // Make the AJAX request
             $.ajax({
-                url: '/dcost-service/subscribe/sync',
+                url: '/dcost-service/subscribe/inquiry',
                 type: 'POST',
                 contentType: 'application/json',
-                dataType: 'json',
-                data:  JSON.stringify(dataToSend),
+                data: JSON.stringify(inquiryReq),
                 success: function(response) {
-                    setTimeout(function(){
-                               $("#overlay").fadeOut(100);
-                    },100);
-                    console.log('Sync API response:', response);
-                    let inquiryReq = {
-                        userId: "49b7a371-a487-4fdb-b0d2-4ceb58656f1c",
-                        page: 0,
-                        size: 10
-                    };
-                    // Make the AJAX request
-                    $.ajax({
-                        url: '/dcost-service/subscribe/inquiry',
-                        type: 'POST',
-                        contentType: 'application/json',
-                        data: JSON.stringify(inquiryReq),
-                        success: function(response) {
 
-                            console.log('Server response:', response);
-                            $('#report-sources').empty();
-                            response.data.forEach(function(item) {
-                                $('#report-sources').append(
-                                    '<li>' + item.digitalPaymentName + '<div><ul><li>Daily Amount: ' + item.dailyAmountId + '</li><li>Monthly Amount: ' + item.monthlyAmountId + '</li><li>Yearly Amount: ' + item.yearlyAmountId + '</li></ul></div></li>'
-                                );
-                            });
-                        },
-                        error: function(xhr, status, error) {
-                            console.error('AJAX error:', error);
-                        }
+                    console.log('Server response:', response);
+                    $('#report-sources').empty();
+                    response.data.forEach(function(item) {
+                        $('#report-sources').append(
+                            '<li>' + item.digitalPaymentName + '<div><ul><li>Daily Amount: ' + item.dailyAmountId + '</li><li>Monthly Amount: ' + item.monthlyAmountId + '</li><li>Yearly Amount: ' + item.yearlyAmountId + '</li></ul></div></li>'
+                        );
                     });
                 },
                 error: function(xhr, status, error) {
-                    console.error('Sync API error:', error);
+                    console.error('AJAX error:', error);
                 }
             });
-        });
+        },
+        error: function(xhr, status, error) {
+            console.error('Sync API error:', error);
+        }
     });
+    });
+
+
+      $('.btn-primary').click(function() {
+          let dataToSend = {
+              // Add your JSON data here
+              userId: "49b7a371-a487-4fdb-b0d2-4ceb58656f1c",
+              digitalPaymentIds: ["ecb6cd26-cc21-4c7d-aecd-e1cae2d99d62","1095eb1c-8611-49e5-a582-054c8037aaae","63279f87-a860-40d1-ad1d-2b298958b84b"]
+          };
+          $.ajax({
+              url: '/dcost-service/subscribe/sync',
+              type: 'POST',
+              contentType: 'application/json',
+              dataType: 'json',
+              data:  JSON.stringify(dataToSend),
+              success: function(response) {
+                  setTimeout(function(){
+                             $("#overlay").fadeOut(100);
+                  },100);
+                  console.log('Sync API response:', response);
+                  let inquiryReq = {
+                      userId: "49b7a371-a487-4fdb-b0d2-4ceb58656f1c",
+                      page: 0,
+                      size: 10
+                  };
+                  // Make the AJAX request
+                  $.ajax({
+                      url: '/dcost-service/subscribe/inquiry',
+                      type: 'POST',
+                      contentType: 'application/json',
+                      data: JSON.stringify(inquiryReq),
+                      success: function(response) {
+
+                          console.log('Server response:', response);
+                          $('#report-sources').empty();
+                          response.data.forEach(function(item) {
+                              $('#report-sources').append(
+                                  '<li>' + item.digitalPaymentName + '<div><ul><li>Daily Amount: ' + item.dailyAmountId + '</li><li>Monthly Amount: ' + item.monthlyAmountId + '</li><li>Yearly Amount: ' + item.yearlyAmountId + '</li></ul></div></li>'
+                              );
+                          });
+                      },
+                      error: function(xhr, status, error) {
+                          console.error('AJAX error:', error);
+                      }
+                  });
+              },
+              error: function(xhr, status, error) {
+                  console.error('Sync API error:', error);
+              }
+          });
+      });
+   });
 </script>
 </body>
 </html>

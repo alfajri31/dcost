@@ -10,4 +10,6 @@ import java.io.IOException;
 public interface IDCostService {
     CommonResp syncService(SyncRequest syncRequest) throws IOException;
     InquiryResp inquirySubscribe(InquiryReq inquiryReq);
+
+    CommonResp resetSync(SyncRequest syncRequest) throws IOException;
 }

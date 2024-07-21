@@ -36,4 +36,9 @@ public class DCostController {
         return ResponseEntity.ok().body(response);
     }
 
+    @PostMapping(value = "reset")
+    private ResponseEntity<CommonResp> reset(@RequestBody SyncRequest syncRequest) throws IOException {
+        CommonResp response = idcostService.resetSync(syncRequest);
+        return ResponseEntity.ok().body(response);
+    }
 }
