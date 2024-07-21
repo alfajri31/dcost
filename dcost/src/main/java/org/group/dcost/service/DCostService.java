@@ -144,6 +144,11 @@ public class DCostService implements IDCostService {
     public InquiryResp inquirySubscribe(InquiryReq inquiryReq) {
         Pageable paging = PageRequest.of(inquiryReq.getPage(),inquiryReq.getSize());
         Page<UserSubscribe> userSubscribes = userSubscribeRepository.findAllByUserId(inquiryReq.getUserId(),paging);
+        userSubscribes.getContent().forEach(userSubscribe -> {
+            userSubscribe.setDailyAmountId(Util.convertToIndonesianRupiah(userSubscribe.getDailyAmount()));
+            userSubscribe.setMonthlyAmountId(Util.convertToIndonesianRupiah(userSubscribe.getMonthlyAmount()));
+            userSubscribe.setYearlyAmountId(Util.convertToIndonesianRupiah(userSubscribe.getYearlyAmount()));
+        });
         return InquiryResp.builder()
                 .page(inquiryReq.getPage())
                 .data(userSubscribes.stream().collect(Collectors.toList()))

@@ -59,7 +59,10 @@ public class DataSeeder implements CommandLineRunner {
                     1000000,
                     12000000,
                     formattedDate,
-                    true
+                    true,
+                    "",
+                    "",
+                    ""
             );
             UserSubscribe document2 = new UserSubscribe(
                     new ObjectId().toHexString(),
@@ -70,7 +73,10 @@ public class DataSeeder implements CommandLineRunner {
                     1000000,
                     12000000,
                     formattedDate,
-                    true
+                    true,
+                    "",
+                    "",
+                    ""
             );
             UserSubscribe document3 = new UserSubscribe(
                     new ObjectId().toHexString(),
@@ -81,7 +87,10 @@ public class DataSeeder implements CommandLineRunner {
                     1000000,
                     12000000,
                     formattedDate,
-                    true
+                    true,
+                    "",
+                    "",
+                    ""
             );
             mongoTemplate.insert(Arrays.asList(document1, document2,document3),"user_subscribe");
         }

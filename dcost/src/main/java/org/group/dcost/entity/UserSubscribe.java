@@ -21,4 +21,7 @@ public class UserSubscribe {
     private Integer yearlyAmount;
     private String currentDate;
     private Boolean active;
+    private String dailyAmountId;
+    private String monthlyAmountId;
+    private String yearlyAmountId;
 }
