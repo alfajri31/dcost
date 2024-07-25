@@ -51,7 +51,8 @@ public class DCostService implements IDCostService {
             Optional<UserSubscribe> opt = userSubscribeRepository.findByCurrentDateAndDigitalPaymentId(formattedDate, id);
             if (opt.isEmpty()) {
                 UserSubscribe userSubscribe = new UserSubscribe();
-                userSubscribe.setId(syncRequest.getUserId());
+                userSubscribe.setUserId(syncRequest.getUserId());
+                userSubscribe.setDigitalPaymentId(id);
                 userSubscribe.setDailyAmount(randomAmount);
                 userSubscribe.setMonthlyAmount(randomAmount * 30);
                 userSubscribe.setYearlyAmount(randomAmount * 365);
@@ -65,6 +66,7 @@ public class DCostService implements IDCostService {
                 DanaCallbackMappingRequest dana =DanaCallbackMappingRequest.builder()
                         .userId(syncRequest.getUserId())
                         .requestId(Util.getRandomUUID())
+                        .digitalPaymentId(syncRequest.getDigitalPaymentIds().get(0))
                         .requestName("dana")
                         .paidAmount(Util.getRandomValue())
                         .date(formattedDate).build();
@@ -79,6 +81,7 @@ public class DCostService implements IDCostService {
                         .requestId(Util.getRandomUUID())
                         .requestName("gopay")
                         .paidAmount(Util.getRandomValue())
+                        .digitalPaymentId(syncRequest.getDigitalPaymentIds().get(1))
                         .date(formattedDate).build();
                 try {
                     String send = objectMapper.writeValueAsString(gopay);
@@ -91,6 +94,7 @@ public class DCostService implements IDCostService {
                         .requestId(Util.getRandomUUID())
                         .requestName("shopee")
                         .paidAmount(Util.getRandomValue())
+                        .digitalPaymentId(syncRequest.getDigitalPaymentIds().get(2))
                         .date(formattedDate).build();
                 try {
                     String send = objectMapper.writeValueAsString(shopee);

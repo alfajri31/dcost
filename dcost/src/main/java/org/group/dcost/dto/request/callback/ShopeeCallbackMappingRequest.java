@@ -11,4 +11,5 @@ public class ShopeeCallbackMappingRequest {
     private String requestName;
     private Integer paidAmount;
     private String date;
+    private String digitalPaymentId;
 }

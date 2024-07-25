@@ -10,8 +10,8 @@ import java.util.Optional;
 public interface UserSubscribeRepository extends MongoRepository<UserSubscribe, String> {
     Optional<UserSubscribe> findByDigitalPaymentId(
             String digitalPaymentId);
-    Optional<UserSubscribe> findByUserIdAndDigitalPaymentNameAndCurrentDate(
-            String userId,String paymentName,String currentDate);
+    Optional<UserSubscribe> findByUserIdAndDigitalPaymentIdAndCurrentDate(
+            String userId,String paymentId,String currentDate);
     Optional<UserSubscribe> findByCurrentDateAndDigitalPaymentId(
             String currentDate,String
             digitalPaymentId);

@@ -34,9 +34,11 @@ public class TopicListener {
         try {
             GeneralCallbackMapping data  = objectMapper.readValue(payload.value(), GeneralCallbackMapping.class);
             Optional<UserSubscribe> opt = userSubscribeRepository
-                    .findByUserIdAndDigitalPaymentNameAndCurrentDate(data.getUserId(),data.getRequestName(),formattedDate);
+                    .findByUserIdAndDigitalPaymentIdAndCurrentDate(data.getUserId(),data.getDigitalPaymentId(),formattedDate);
             if(opt.isPresent()) {
                 UserSubscribe user = opt.get();
+                user.setDigitalPaymentName(data.getRequestName());
+                user.setDigitalPaymentName(data.getRequestName());
                 user.setDailyAmount((user.getDailyAmount()) + data.getPaidAmount());
                 user.setMonthlyAmount((user.getDailyAmount()) * 30);
                 user.setYearlyAmount((user.getDailyAmount()) * 365);

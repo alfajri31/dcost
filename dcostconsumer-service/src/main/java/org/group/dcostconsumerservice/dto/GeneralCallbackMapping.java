@@ -15,11 +15,15 @@ public class GeneralCallbackMapping {
     private String userId;
     @JsonProperty("requestId")
     private String requestId;
+    @JsonProperty("danaId")
+    private String danaId;
     @JsonProperty("requestName")
     private String requestName;
     @JsonProperty("paidAmount")
     private Integer paidAmount;
     @JsonProperty("date")
     private String date;
+    @JsonProperty("digitalPaymentId")
+    private String digitalPaymentId;
 }
 
